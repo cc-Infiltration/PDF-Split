@@ -6,10 +6,8 @@ import os
 import re
 import math
 
-
+"""路径安全验证工具类"""
 class PathSecurity:
-    """路径安全验证工具类"""
-
     # 禁止访问的系统路径模式
     BLOCKED_PATTERNS = [
         r'^[/\\]?etc',
@@ -34,7 +32,7 @@ class PathSecurity:
     # WINDOWS: 核心系统目录
     # SYSTEM VOLUME INFORMATION: 系统还原信息目录
     # $RECYCLE.BIN: 回收站目录
-    # 注意：Program Files是应用程序安装目录，用户有权访问其中的文件
+    # Program Files是应用程序安装目录，用户有权访问其中的文件
     WINDOWS_PROTECTED_PATHS = [
         'C:\\WINDOWS',
         'C:\\SYSTEM VOLUME INFORMATION',
@@ -44,7 +42,6 @@ class PathSecurity:
     @classmethod
     def normalize_path(cls, path: str) -> str:
         """规范化文件路径
-
         Args:
             path: 输入路径
 
@@ -72,14 +69,7 @@ class PathSecurity:
 
     @classmethod
     def validate_path(cls, path: str) -> Tuple[bool, str]:
-        """验证路径安全性
-
-        Args:
-            path: 待验证的路径
-
-        Returns:
-            (是否安全, 错误消息)
-        """
+        #验证路径安全性
         if not path:
             return False, "路径不能为空"
 
@@ -141,14 +131,7 @@ class PathSecurity:
 
     @classmethod
     def sanitize_filename(cls, filename: str) -> str:
-        """清理文件名，移除非法字符
-
-        Args:
-            filename: 原始文件名
-
-        Returns:
-            清理后的文件名
-        """
+        """清理文件名，移除非法字符"""
         if not filename:
             return "unnamed"
 
@@ -181,14 +164,7 @@ class ValidationUtils:
 
     @classmethod
     def validate_file_path(cls, path: str) -> Tuple[bool, str]:
-        """验证文件路径
-
-        Args:
-            path: 文件路径
-
-        Returns:
-            (是否有效, 错误消息)
-        """
+        #验证文件路径
         if not path:
             return False, "文件路径不能为空"
 
@@ -221,20 +197,12 @@ class ValidationUtils:
             return False, f"无法读取文件大小: {str(e)}"
 
         return True, ""
-
+        
+    #验证输出路径
     @classmethod
     def validate_output_path(cls, path: str) -> Tuple[bool, str]:
-        """验证输出路径
-
-        Args:
-            path: 输出文件路径
-
-        Returns:
-            (是否有效, 错误消息)
-        """
         if not path:
             return False, "输出路径不能为空"
-
         # 路径安全检查
         is_safe, error_msg = PathSecurity.validate_path(path)
         if not is_safe:
@@ -272,9 +240,6 @@ class ValidationUtils:
         Args:
             pages_text: 页码范围字符串
             total_pages: PDF总页数
-
-        Returns:
-            (是否有效, 有效页码列表, 错误消息)
         """
         if not pages_text:
             return False, [], "页码范围不能为空"
@@ -330,7 +295,7 @@ class ValidationUtils:
 
 
 class PDFProcessor:
-    """PDF处理引擎 - 优化大文件处理"""
+    """PDF处理引擎"""
 
     # 内存阈值：每100页触发一次内存释放检查
     MEMORY_CHECK_INTERVAL = 100
@@ -463,7 +428,7 @@ class PDFExtractorApp:
 
     def _configure_window(self) -> None:
         """配置窗口属性"""
-        self.root.title("PDF页码提取专业版")
+        self.root.title("PDF页码提取")
         self.root.geometry("600x520")
         self.root.resizable(False, False)
         self.root.configure(bg=self.colors["background"])
@@ -698,7 +663,7 @@ class PDFExtractorApp:
 
         self.extract_button = tk.Button(
             button_frame,
-            text="开始提取",
+            text="提取",
             font=self.fonts["subtitle"],
             fg=self.colors["background"],
             bg=self.colors["text_primary"],
@@ -998,13 +963,11 @@ class PDFExtractorApp:
         """显示成功消息"""
         messagebox.showinfo("完成", message)
 
-
 def main() -> None:
     """主函数"""
     root = tk.Tk()
     app = PDFExtractorApp(root)
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
